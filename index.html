@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Shipment Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="tracking-title">Tracking Shipment</div>
+            <h1 class="tracking-number" id="tracking-number">Loading...</h1>
+        </header>
+
+        <div class="status-card">
+            <div class="shipment-route">
+                <div class="route-point" id="origin">
+                </div>
+                <div class="route-line">
+                    <i class="fa-solid fa-plane plane-icon"></i>
+                </div>
+                <div class="route-point" id="destination">
+                </div>
+            </div>
+            <div class="current-status">
+                <span class="status-badge" id="main-status">Loading Status...</span>
+                <p class="estimated-delivery" id="delivery-estimate"></p>
+                <p class="transit-time" id="transit-time"></p>
+            </div>
+        </div>
+
+        <div class="timeline">
+            <h2 class="timeline-header">Tracking History</h2>
+            <ul class="timeline-list" id="timeline-list">
+            </ul>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
