@@ -145,6 +145,43 @@ header {
 .estimated-delivery {
     color: var(--text-secondary);
     font-size: 0.875rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+}
+
+.eta-date {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.eta-countdown {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.eta-overdue {
+    color: var(--warning-color);
+    font-weight: 600;
+}
+
+.eta-delivered {
+    color: var(--success-color);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.eta-unavailable {
+    color: var(--text-secondary);
+    font-style: italic;
+    opacity: 0.7;
 }
 
 .transit-time {

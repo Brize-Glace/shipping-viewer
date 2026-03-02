@@ -93,6 +93,57 @@ function renderTracking(data) {
         }
     }
 
+    // ETA Display
+    const deliveryEstimateElement = document.getElementById('delivery-estimate');
+    if (deliveryEstimateElement) {
+        if (milestone === 'delivered') {
+            deliveryEstimateElement.innerHTML = `<i class="fa-solid fa-circle-check"></i> Delivered`;
+            deliveryEstimateElement.classList.add('eta-delivered');
+        } else {
+            const delivery = shipment.delivery || {};
+            const courierEta = delivery.courierEstimatedDeliveryDate;
+            const etaRaw = (courierEta && courierEta.from) || delivery.estimatedDeliveryDate || null;
+
+            if (etaRaw) {
+                const etaDate = new Date(etaRaw);
+                const now = new Date();
+
+                const etaFormatted = new Intl.DateTimeFormat('fr-FR', {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                }).format(etaDate);
+
+                // Calculate remaining time
+                const diffMs = etaDate - now;
+                let etaLabel = '';
+
+                if (diffMs <= 0) {
+                    etaLabel = `<span class="eta-overdue"><i class="fa-solid fa-triangle-exclamation"></i> Delivery expected: overdue</span>`;
+                } else {
+                    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+                    if (diffDays === 0) {
+                        etaLabel = `<i class="fa-solid fa-clock"></i> Estimated arrival <strong>today</strong>`;
+                    } else if (diffDays === 1) {
+                        etaLabel = `<i class="fa-solid fa-clock"></i> Estimated arrival in <strong>1 day</strong>`;
+                    } else {
+                        etaLabel = `<i class="fa-solid fa-clock"></i> Estimated arrival in <strong>${diffDays} days</strong>`;
+                    }
+                }
+
+                deliveryEstimateElement.innerHTML = `
+                    <span class="eta-date"><i class="fa-regular fa-calendar"></i> ${etaFormatted}</span>
+                    <span class="eta-countdown">${etaLabel}</span>
+                `;
+            } else {
+                deliveryEstimateElement.innerHTML = `<i class="fa-solid fa-clock"></i> ETA not available`;
+                deliveryEstimateElement.classList.add('eta-unavailable');
+            }
+        }
+    }
+
     const transitTimeElement = document.getElementById('transit-time');
     if (transitTimeElement && events.length > 0) {
         const sortedEvents = [...events].sort((a, b) => new Date(a.datetime) - new Date(b.datetime));
