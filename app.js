@@ -54,10 +54,13 @@ function renderTracking(data) {
     const origin = shipment.originCountryCode || 'XX';
     const destination = shipment.destinationCountryCode || 'XX';
 
+    // Fallback SVG for unknown country codes (e.g. XX)
+    const flagFallback = `data:image/svg+xml,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80"><rect width="80" height="80" rx="8" fill="%23e2e8f0"/><text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="Inter,sans-serif" font-size="28" fill="%2394a3b8">🌐</text></svg>')}`;
+
     const originElement = document.getElementById('origin');
     if (originElement) {
         originElement.innerHTML = `
-            <img src="https://flagcdn.com/w80/${origin.toLowerCase()}.png" alt="${origin}" class="country-flag">
+            <img src="https://flagcdn.com/w80/${origin.toLowerCase()}.png" alt="${origin}" class="country-flag" onerror="this.onerror=null;this.src='${flagFallback}'">
             <span class="country-code">${origin}</span>
         `;
     }
@@ -65,7 +68,7 @@ function renderTracking(data) {
     const destElement = document.getElementById('destination');
     if (destElement) {
         destElement.innerHTML = `
-            <img src="https://flagcdn.com/w80/${destination.toLowerCase()}.png" alt="${destination}" class="country-flag">
+            <img src="https://flagcdn.com/w80/${destination.toLowerCase()}.png" alt="${destination}" class="country-flag" onerror="this.onerror=null;this.src='${flagFallback}'">
             <span class="country-code">${destination}</span>
         `;
     }
