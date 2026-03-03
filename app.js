@@ -25,11 +25,9 @@ async function fetchTracking() {
     } catch (error) {
         console.error('Erreur lors de la récupération du suivi:', error);
 
-        const statusElement = document.getElementById('main-status');
+        const statusElement = document.getElementById('milestone-progress');
         if (statusElement) {
-            statusElement.textContent = 'Erreur API';
-            statusElement.style.backgroundColor = '#fee2e2';
-            statusElement.style.color = '#991b1b';
+            statusElement.innerHTML = '<span style="color:#991b1b;font-weight:600;">API Error</span>';
         }
     }
 }
@@ -73,24 +71,38 @@ function renderTracking(data) {
         `;
     }
 
-    const statusElement = document.getElementById('main-status');
     const milestone = shipment.statusMilestone;
 
-    if (statusElement) {
-        statusElement.textContent = formatMilestone(milestone);
-        statusElement.style = '';
-        statusElement.className = 'status-badge';
+    // Milestone Progress Timeline
+    const milestoneContainer = document.getElementById('milestone-progress');
+    if (milestoneContainer) {
+        const milestones = [
+            { key: 'info_received', label: 'Info Received', icon: 'fa-inbox' },
+            { key: 'in_transit', label: 'In Transit', icon: 'fa-truck-fast' },
+            { key: 'out_for_delivery', label: 'Out for Delivery', icon: 'fa-truck' },
+            { key: 'delivered', label: 'Delivered', icon: 'fa-circle-check' }
+        ];
 
-        if (milestone === 'delivered') {
-            statusElement.style.backgroundColor = '#dcfce7';
-            statusElement.style.color = '#15803d';
-        } else if (milestone === 'out_for_delivery') {
-            statusElement.style.backgroundColor = '#dbeafe';
-            statusElement.style.color = '#1e40af';
-        } else if (milestone === 'failed_attempt') {
-            statusElement.style.backgroundColor = '#fef3c7';
-            statusElement.style.color = '#b45309';
-        }
+        const currentIndex = milestones.findIndex(m => m.key === milestone);
+        const activeIndex = currentIndex === -1 ? 0 : currentIndex;
+
+        milestoneContainer.innerHTML = milestones.map((m, i) => {
+            let stepClass = 'milestone-step';
+            if (i < activeIndex) stepClass += ' completed';
+            if (i === activeIndex) stepClass += ' active';
+
+            const connector = i < milestones.length - 1
+                ? `<div class="milestone-connector ${i < activeIndex ? 'filled' : ''}"></div>`
+                : '';
+
+            return `
+                <div class="${stepClass}">
+                    <div class="milestone-dot"><i class="fa-solid ${m.icon}"></i></div>
+                    <span class="milestone-label">${m.label}</span>
+                </div>
+                ${connector}
+            `;
+        }).join('');
     }
 
     // ETA Display

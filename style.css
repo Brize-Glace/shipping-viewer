@@ -103,27 +103,7 @@ header {
     color: var(--text-secondary);
 }
 
-.route-line {
-    flex: 2;
-    height: 2px;
-    background-color: var(--border-color);
-    position: relative;
-    margin: 0 1rem;
-    top: -15px;
-    /* Adjust to align with flags */
-}
 
-/* Animated Plane */
-.plane-icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--card-background);
-    padding: 0 10px;
-    color: var(--primary-color);
-    font-size: 1.5rem;
-}
 
 .current-status {
     text-align: center;
@@ -131,15 +111,90 @@ header {
     border-top: 1px solid var(--border-color);
 }
 
-.status-badge {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    border-radius: 9999px;
-    font-weight: 600;
-    font-size: 0.875rem;
-    background-color: #dbeafe;
+/* Milestone Progress Timeline */
+.milestone-progress {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex: 2;
+    gap: 0;
+    padding: 0;
+    margin: 0 0.5rem;
+}
+
+.milestone-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    flex-shrink: 0;
+}
+
+.milestone-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    transition: all 0.4s ease;
+    position: relative;
+    z-index: 2;
+}
+
+.milestone-step.completed .milestone-dot,
+.milestone-step.active .milestone-dot {
+    background: var(--primary-color);
+    color: #fff;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+}
+
+.milestone-step.active .milestone-dot {
+    animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes pulse-dot {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+    }
+
+    50% {
+        box-shadow: 0 0 0 8px rgba(37, 99, 235, 0.08);
+    }
+}
+
+.milestone-label {
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-align: center;
+    max-width: 70px;
+    line-height: 1.2;
+}
+
+.milestone-step.completed .milestone-label,
+.milestone-step.active .milestone-label {
     color: var(--primary-color);
-    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.milestone-connector {
+    flex: 1;
+    height: 3px;
+    background: var(--border-color);
+    min-width: 40px;
+    margin-top: 16px;
+    border-radius: 2px;
+    transition: background 0.4s ease;
+}
+
+.milestone-connector.filled {
+    background: var(--primary-color);
 }
 
 .estimated-delivery {
