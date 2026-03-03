@@ -108,29 +108,27 @@ function renderTracking(data) {
                 const etaDate = new Date(etaRaw);
                 const now = new Date();
 
-                const etaFormatted = new Intl.DateTimeFormat('fr-FR', {
+                const etaFormatted = new Intl.DateTimeFormat('en-US', {
                     weekday: 'long',
                     day: 'numeric',
                     month: 'long',
                     year: 'numeric'
                 }).format(etaDate);
 
-                // Calculate remaining time
-                const diffMs = etaDate - now;
+                // Compare by calendar date (not exact timestamp)
+                const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                const etaDayStart = new Date(etaDate.getFullYear(), etaDate.getMonth(), etaDate.getDate());
+                const diffDays = Math.round((etaDayStart - todayStart) / (1000 * 60 * 60 * 24));
                 let etaLabel = '';
 
-                if (diffMs <= 0) {
+                if (diffDays < 0) {
                     etaLabel = `<span class="eta-overdue"><i class="fa-solid fa-triangle-exclamation"></i> Delivery expected: overdue</span>`;
+                } else if (diffDays === 0) {
+                    etaLabel = `<i class="fa-solid fa-clock"></i> Estimated arrival <strong>today</strong>`;
+                } else if (diffDays === 1) {
+                    etaLabel = `<i class="fa-solid fa-clock"></i> Estimated arrival <strong>tomorrow</strong>`;
                 } else {
-                    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-                    if (diffDays === 0) {
-                        etaLabel = `<i class="fa-solid fa-clock"></i> Estimated arrival <strong>today</strong>`;
-                    } else if (diffDays === 1) {
-                        etaLabel = `<i class="fa-solid fa-clock"></i> Estimated arrival in <strong>1 day</strong>`;
-                    } else {
-                        etaLabel = `<i class="fa-solid fa-clock"></i> Estimated arrival in <strong>${diffDays} days</strong>`;
-                    }
+                    etaLabel = `<i class="fa-solid fa-clock"></i> Estimated arrival in <strong>${diffDays} days</strong>`;
                 }
 
                 deliveryEstimateElement.innerHTML = `
